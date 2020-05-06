@@ -19,6 +19,10 @@ module.exports = function (app) {
     );
   });
 
+  app.get('/livros/form', function (req, resp) {
+    resp.marko(require('../views/livros/form/form.marko'))
+  });
+
   app.get('/livros', function (req, resp) {
 
     const livroDao = new LivroDao(db);
@@ -29,6 +33,14 @@ module.exports = function (app) {
           livros: livros
         }
       ))
+      .catch(erro => console.log(erro));
+  });
+
+  app.post('/livros', function (req, resp) {
+    console.log(req.body);
+    const livroDao = new LivroDao(db);
+    livroDao.adiciona(req.body)
+      .then(resp.redirect('/livros'))
       .catch(erro => console.log(erro));
   });
 
